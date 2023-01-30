@@ -1,3 +1,10 @@
-/Users/jeffreyvanhelden/IdeaProjects/1985/shared/src/main/java/guru/bonacci/_1985/rest/TrValidationResponse.java
-/Users/jeffreyvanhelden/IdeaProjects/1985/shared/src/main/java/guru/bonacci/_1985/rest/TrValidationRequest.java
-/Users/jeffreyvanhelden/IdeaProjects/1985/shared/src/main/java/guru/bonacci/_1985/pools/PoolType.java
+/Users/jeffreyvanhelden/IdeaProjects/1985-cassandra/shared/src/main/java/guru/bonacci/_1985/cassandra/CTrip.java
+/Users/jeffreyvanhelden/IdeaProjects/1985-cassandra/shared/src/main/java/guru/bonacci/_1985/cassandra/CTransKey.java
+/Users/jeffreyvanhelden/IdeaProjects/1985-cassandra/shared/src/main/java/guru/bonacci/_1985/cassandra/CAccountKey.java
+/Users/jeffreyvanhelden/IdeaProjects/1985-cassandra/shared/src/main/java/guru/bonacci/_1985/cassandra/CTrans.java
+/Users/jeffreyvanhelden/IdeaProjects/1985-cassandra/shared/src/main/java/guru/bonacci/_1985/kafka/KTrans.java
+/Users/jeffreyvanhelden/IdeaProjects/1985-cassandra/shared/src/main/java/guru/bonacci/_1985/cassandra/CAccount.java
+/Users/jeffreyvanhelden/IdeaProjects/1985-cassandra/shared/src/main/java/guru/bonacci/_1985/cassandra/CPool.java
+/Users/jeffreyvanhelden/IdeaProjects/1985-cassandra/shared/src/main/java/guru/bonacci/_1985/rest/TrValidationResponse.java
+/Users/jeffreyvanhelden/IdeaProjects/1985-cassandra/shared/src/main/java/guru/bonacci/_1985/rest/TrValidationRequest.java
+/Users/jeffreyvanhelden/IdeaProjects/1985-cassandra/shared/src/main/java/guru/bonacci/_1985/pools/PoolType.java

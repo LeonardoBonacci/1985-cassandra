@@ -1,3 +1,14 @@
+guru/bonacci/_1985/cassandra/CTrans$CTransBuilder.class
+guru/bonacci/_1985/cassandra/CTrans.class
+guru/bonacci/_1985/cassandra/CAccountKey.class
+guru/bonacci/_1985/kafka/KTrans$KTransBuilder.class
+guru/bonacci/_1985/cassandra/CTransKey.class
+guru/bonacci/_1985/cassandra/CTrip.class
+guru/bonacci/_1985/cassandra/CAccount.class
+guru/bonacci/_1985/cassandra/CAccount$CAccountBuilder.class
 guru/bonacci/_1985/rest/TrValidationRequest.class
 guru/bonacci/_1985/pools/PoolType.class
+guru/bonacci/_1985/cassandra/CTrip$CTripBuilder.class
 guru/bonacci/_1985/rest/TrValidationResponse.class
+guru/bonacci/_1985/kafka/KTrans.class
+guru/bonacci/_1985/cassandra/CPool.class

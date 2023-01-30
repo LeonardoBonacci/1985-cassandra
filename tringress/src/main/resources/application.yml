@@ -10,7 +10,8 @@ spring:
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
       
   application.name: tringress-app
- 
+  mvc.async.request-timeout: 1000
+  
   cassandra:
     schema-action: CREATE_IF_NOT_EXISTS
     request.timeout: 10s

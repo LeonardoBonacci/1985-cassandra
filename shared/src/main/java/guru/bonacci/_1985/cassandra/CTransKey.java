@@ -22,7 +22,7 @@ public class CTransKey implements Serializable {
 	@PrimaryKeyColumn(name = "pool_id", ordinal = 0, type = PrimaryKeyType.PARTITIONED)
 	private String poolId;
 
-	@PrimaryKeyColumn(name = "account_id", ordinal = 1, type = PrimaryKeyType.PARTITIONED)
+	@PrimaryKeyColumn(name = "account_name", ordinal = 1, type = PrimaryKeyType.PARTITIONED)
 	private String accountName;
 	
 	@PrimaryKeyColumn(name = "when", ordinal = 2, type = PrimaryKeyType.CLUSTERED, ordering = Ordering.DESCENDING)
