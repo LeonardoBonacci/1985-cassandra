@@ -19,9 +19,9 @@ public class CasTransKey implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	@PrimaryKeyColumn(name = "pool_account_id", ordinal = 0, type = PrimaryKeyType.CLUSTERED)
+	@PrimaryKeyColumn(name = "pool_account_id", ordinal = 0, type = PrimaryKeyType.PARTITIONED)
 	private String poolAccountId;
 	
-	@PrimaryKeyColumn(name = "when", ordinal = 1, type = PrimaryKeyType.PARTITIONED, ordering = Ordering.DESCENDING)
+	@PrimaryKeyColumn(name = "when", ordinal = 1, type = PrimaryKeyType.CLUSTERED, ordering = Ordering.DESCENDING)
 	private long when;
 }

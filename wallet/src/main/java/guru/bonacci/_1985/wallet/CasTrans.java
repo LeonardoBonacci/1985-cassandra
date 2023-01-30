@@ -13,7 +13,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@Table
+@Table("aaa")
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -42,11 +42,11 @@ public class CasTrans implements Serializable {
   	this.setTo(oldFrom);
     this.setAmount(this.getAmount().negate());
     // and, at last, with new values..
-    this.getKey().setPoolAccountId(poolAccountId());
+    this.getKey().setPoolAccountId(determinePoolAccountId());
     return this;
   }
   
-  public String poolAccountId() {
+  public String determinePoolAccountId() {
     return this.getPoolId() + "." + this.getFrom();
   }
 }

@@ -1,5 +1,7 @@
 package guru.bonacci._1985.wallet;
 
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.log;
+
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
@@ -22,20 +24,41 @@ public class WalletApp {
 	@Bean
 	public CommandLineRunner clr(CasTransRepository transRepo) {
 		return args -> {
-			transRepo.deleteAll();
+//			transRepo.deleteAll();
 
-			var now = System.currentTimeMillis();
-			var trans1Key = new CasTransKey("coro.me", now);
+			var trans1Key = new CasTransKey("coro.me", System.currentTimeMillis());
 			var trans1 = CasTrans.builder().key(trans1Key).transferId(UUID.randomUUID().toString())
 					.poolId("coro").from("me").to("you").amount(BigDecimal.ONE).build();
-			var trans2 = trans1.negativeClone();
+
+			var trans1n = trans1.negativeClone();
 
 			System.out.println(trans1);
+			System.out.println(trans1n);
+			transRepo.saveAll(List.of(trans1, trans1n));
+
+			var trans2Key = new CasTransKey("coro.you", System.currentTimeMillis());
+			var trans2 = CasTrans.builder().key(trans2Key).transferId(UUID.randomUUID().toString())
+					.poolId("coro").from("you").to("me").amount(BigDecimal.TEN).build();
+
+			var trans2n = trans2.negativeClone();
+
 			System.out.println(trans2);
-			transRepo.saveAll(List.of(trans1, trans2));
-			
+			System.out.println(trans2n);
+			transRepo.saveAll(List.of(trans2, trans2n));
+
 			transRepo.findAll().forEach(tr -> log.info("Tr: {}", tr));
 			
+			transRepo.findAllByKeyPoolAccountId(trans1.getKey().getPoolAccountId()).forEach(tr -> log.info("all: {}", tr));
+			
+			transRepo.findByKeyPoolAccountIdAndKeyWhen(trans1.getKey().getPoolAccountId(), trans1.getKey().getWhen())
+				.ifPresent(tr -> log.info("one: {}", tr));
+			
+			transRepo.findAllByKeyPoolAccountIdAndKeyWhenGreaterThanEqual(trans1.getKey().getPoolAccountId(), trans1.getKey().getWhen())
+				.forEach(tr -> log.info("fromWhen: {}", tr));
+
+			transRepo.findAllByKeyPoolAccountIdAndKeyWhenGreaterThanEqualAndKeyWhenLessThan(trans1.getKey().getPoolAccountId(), 0l, System.currentTimeMillis())
+				.forEach(tr -> log.info("fromtoWhen: {}", tr));
+
 		};
 	}
 }
