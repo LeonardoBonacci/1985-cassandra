@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @PrimaryKeyClass
 @NoArgsConstructor
 @AllArgsConstructor
-public class CasTransKey implements Serializable {
+public class TransKey implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 

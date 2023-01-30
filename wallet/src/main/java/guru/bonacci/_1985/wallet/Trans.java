@@ -13,16 +13,16 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@Table("aaa")
+@Table
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CasTrans implements Serializable {
+public class Trans implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	@PrimaryKey
-	private CasTransKey key;
+	private TransKey key;
 	
 	private String poolId; //required
   private String transferId; //required
@@ -30,12 +30,12 @@ public class CasTrans implements Serializable {
   private String to; //required
   private BigDecimal amount; //required
   
-  public CasTrans negativeClone() {
-  	var cloned = SerializationUtils.clone(this);
-    return cloned.negate();
+
+  public Trans negativeClone() {
+    return SerializationUtils.clone(this).negate();
   }
   
-  private CasTrans negate() {
+  private Trans negate() {
   	var oldTo = new String(getTo());
   	var oldFrom = new String(getFrom());
   	this.setFrom(oldTo);
