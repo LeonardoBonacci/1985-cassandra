@@ -3,6 +3,7 @@ package guru.bonacci._1985.tringress.validation;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
+import guru.bonacci._1985.cassandra.CAccountKey;
 import guru.bonacci._1985.cassandra.CPool;
 import guru.bonacci._1985.kafka.KTrans;
 import guru.bonacci._1985.rest.TrValidationRequest;
@@ -22,16 +23,19 @@ public class TransValidationDelegator {
   private final PoolRepository poolRepo;
   private final AccountRepository accountRepo;
 
+  
   public boolean isValid(KTrans trans) {
   	// general validations
 		var poolType = poolRepo.findById(trans.getPoolId()).map(CPool::getType)
-				.orElseThrow(() -> new InvalidTransferException("pool " + trans.getPoolId() + " ..."));
+				.orElseThrow(() -> new InvalidTransferException("pool " + trans.getPoolId() + " is obscure to say the least"));
 
-		accountRepo.findById(trans.getFrom()) //TODO different query
-				.orElseThrow(() -> new InvalidTransferException("pool " + trans.getPoolId() + " ..."));
+		if(!accountRepo.existsById(new CAccountKey(trans.getPoolId(), trans.getFrom()))) {
+			new InvalidTransferException("no account " + trans.getFrom() + " in pool " + trans.getPoolId());
+		}
 
-		accountRepo.findById(trans.getTo()) //TODO different query
-		.orElseThrow(() -> new InvalidTransferException("pool " + trans.getPoolId() + " ..."));
+		if (!accountRepo.existsById(new CAccountKey(trans.getPoolId(), trans.getTo()))) {
+			new InvalidTransferException("no account " + trans.getFrom() + " in pool " + trans.getPoolId());
+		}
 
 		// request balance
 		var trValidationRequest = new TrValidationRequest(trans.getPoolId(), trans.getFrom());

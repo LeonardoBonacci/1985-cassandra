@@ -27,7 +27,7 @@ public class CTrans implements Serializable {
   private String transferId; //required
   private String from; //required
   private String to; //required
-  private Integer amount; //required
+  private Long amount; //required
   
 
   public CTrans negativeClone() {
@@ -41,7 +41,8 @@ public class CTrans implements Serializable {
   	this.setTo(oldFrom);
     this.setAmount(this.getAmount() * -1);
     // and, at last, with new values..
-    this.getKey().setPoolAccountId(poolAccountId());
+    this.getKey().setPoolId(getPoolId());
+    this.getKey().setAccountName(getFrom());
     return this;
   }
   

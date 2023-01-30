@@ -24,6 +24,7 @@ services:
 
   cassandra:
     image: cassandra:4.0.7
+    container_name: cassandra
     restart: always
     ports:
       - 9042:9042

@@ -16,6 +16,7 @@ public class Tripper {
 
 	private final CassandraOperations cTemplate;
 
+	
 	public void register(KTrans trans) {
 		var trip = new Trip(trans.poolAccountId());
 		var tripped = cTemplate.selectOneById(trip.getPoolAccountId(), Trip.class);

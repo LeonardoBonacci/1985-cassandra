@@ -11,8 +11,4 @@ public class TrValidationRequest {
 
 	@Nonnull private String poolId; 
 	@Nonnull private String from;
-	
-  public String poolAccountId() {
-    return this.getPoolId() + "." + this.getFrom();
-  }
 }

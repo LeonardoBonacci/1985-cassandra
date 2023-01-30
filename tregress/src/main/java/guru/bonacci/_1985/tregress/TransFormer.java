@@ -18,10 +18,10 @@ public class TransFormer {
 				.poolId(kTrans.getPoolId())
 				.from(kTrans.getFrom())
 				.to(kTrans.getTo())
-				.amount(kTrans.getAmount().multiply(new BigDecimal(100)).intValue())
+				.amount(kTrans.getAmount().multiply(new BigDecimal(100)).longValue())
 				.build();
 
-		cTrans.setKey(new CTransKey(cTrans.poolAccountId(), when));
+		cTrans.setKey(new CTransKey(cTrans.getPoolId(), cTrans.getFrom(), when));
 		return cTrans;
 	}
 }

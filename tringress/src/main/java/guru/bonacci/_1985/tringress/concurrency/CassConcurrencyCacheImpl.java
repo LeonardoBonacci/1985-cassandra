@@ -15,7 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 public class CassConcurrencyCacheImpl implements ConcurrencyCache {
 
 	private final CassandraOperations cTemplate;
-	private static final String QUERY = "select * from spring_cassandra.john where identifier = '%s' and when < %d";
+	private static final String QUERY = "select * from spring_cassandra.lock where identifier = '%s' and when < %d";
 	
 	@Override
 	public boolean isLocked(String identifier) {

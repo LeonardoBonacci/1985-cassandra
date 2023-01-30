@@ -5,13 +5,11 @@ import org.springframework.data.cassandra.core.mapping.Table;
 
 import guru.bonacci._1985.pools.PoolType;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @Table("pool")
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class CPool {
@@ -20,5 +18,4 @@ public class CPool {
 	private String poolId;
 	
 	private PoolType type;
-  
 }

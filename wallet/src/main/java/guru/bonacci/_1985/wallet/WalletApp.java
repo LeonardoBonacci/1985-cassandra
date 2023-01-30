@@ -31,8 +31,8 @@ public class WalletApp {
 	public BigDecimal validationInfo(@RequestBody @Valid TrValidationRequest trValRequest) {
 		log.info(trValRequest.toString());
 
-		var balanceInt = transRepo.zoekDeBalans(trValRequest.poolAccountId());
-		var balance = new BigDecimal(balanceInt).divide(new BigDecimal(100));
+		var balanceLong = transRepo.zoekDeBalans(trValRequest.getPoolId(), trValRequest.getFrom());
+		var balance = BigDecimal.valueOf(balanceLong).divide(new BigDecimal(100));
 		log.info(balance.toString());
 		return balance;
 	}

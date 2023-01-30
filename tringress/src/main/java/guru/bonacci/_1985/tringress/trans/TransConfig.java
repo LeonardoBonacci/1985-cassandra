@@ -14,6 +14,6 @@ public class TransConfig {
 
   @Bean
   public NewTopic topic() {
-       return new NewTopic("foo", 1, (short) 1);
+       return new NewTopic("transfers", 1, (short) 1);
   }
 }

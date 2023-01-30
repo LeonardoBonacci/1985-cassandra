@@ -30,7 +30,7 @@ public class TransService {
   	validator.isValid(trans);
   	
     var result = kProducer.send(trans);
-    log.info("sent to {}: {}", "foo", result);
+    log.info("sent to {}: {}", "transfers", result);
     return result;
   }
   

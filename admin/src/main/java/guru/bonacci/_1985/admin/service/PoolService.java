@@ -13,10 +13,9 @@ import guru.bonacci._1985.admin.repository.AccountRepository;
 import guru.bonacci._1985.admin.repository.AdminRepository;
 import guru.bonacci._1985.admin.repository.CPoolRepository;
 import guru.bonacci._1985.admin.repository.PoolRepository;
+import guru.bonacci._1985.cassandra.CPool;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @Service
 @RequiredArgsConstructor
 public class PoolService {
@@ -50,7 +49,7 @@ public class PoolService {
     var created = poolRepo.saveAndFlush(pool);
     
     //FIXME for transactional behaviour use Kafka as a hub
-    cpoolRepo.save(null); //TODO
+    cpoolRepo.save(new CPool(pool.getName(), pool.getType())); 
     return created;
   }
   
@@ -62,7 +61,7 @@ public class PoolService {
       
       poolRepo.saveAndFlush(pool);
       //FIXME for transactional behaviour use Kafka as a hub
-      cpoolRepo.deleteById(null); //TODO
+      cpoolRepo.deleteById(pool.getName());
     });
   }
 }

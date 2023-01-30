@@ -25,7 +25,7 @@ public class TregressApp {
 	}
 
 	
-	@KafkaListener(topics = "foo", groupId = "i-am-unique")
+	@KafkaListener(topics = "transfers", groupId = "i-am-unique")
 	public void listenGroupFoo(
 				@Payload KTrans kTrans, 
 				@Header(KafkaHeaders.RECEIVED_TIMESTAMP) String timestamp) {

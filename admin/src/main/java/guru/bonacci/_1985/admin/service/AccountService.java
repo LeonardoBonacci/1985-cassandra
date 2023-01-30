@@ -13,6 +13,8 @@ import guru.bonacci._1985.admin.repository.AccountRepository;
 import guru.bonacci._1985.admin.repository.CAccountRepository;
 import guru.bonacci._1985.admin.repository.PoolRepository;
 import guru.bonacci._1985.admin.repository.UserRepository;
+import guru.bonacci._1985.cassandra.CAccount;
+import guru.bonacci._1985.cassandra.CAccountKey;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -50,7 +52,7 @@ public class AccountService {
     
     var created = accountRepo.saveAndFlush(account);
     //FIXME for transactional behaviour use Kafka as a hub
-    caccountRepo.save(null); //TODO
+    caccountRepo.save(new CAccount(new CAccountKey(account.getPool().getName(), account.getName())));
 
     return Optional.of(created);
   }
@@ -65,8 +67,7 @@ public class AccountService {
       account.setActive(false);
       
       accountRepo.saveAndFlush(account);
-      //FIXME for transactional behaviour use Kafka as a hub
-      caccountRepo.deleteById(null); //TODO
+      caccountRepo.deleteById(new CAccountKey(account.getPool().getName(), account.getName())); 
     });
   }
 }
