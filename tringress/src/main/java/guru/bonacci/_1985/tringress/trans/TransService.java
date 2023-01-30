@@ -2,6 +2,7 @@ package guru.bonacci._1985.tringress.trans;
 
 import org.springframework.stereotype.Service;
 
+import guru.bonacci._1985.kafka.KTrans;
 import guru.bonacci._1985.tringress.concurrency.ConcurrencyCache;
 import guru.bonacci._1985.tringress.concurrency.TransferConcurrencyException;
 import guru.bonacci._1985.tringress.concurrency.Tripper;
@@ -20,7 +21,7 @@ public class TransService {
 	private final TransProducer kProducer;
   
 
-  public Trans transfer(Trans trans) {
+  public KTrans transfer(KTrans trans) {
   	if (isBlocked(trans)) {
   		throw new TransferConcurrencyException();
   	}
@@ -33,8 +34,8 @@ public class TransService {
     return result;
   }
   
-  private boolean isBlocked(Trans trans) {
-  	var identifier = trans.getPoolId() + "." + trans.getFrom();
+  private boolean isBlocked(KTrans trans) {
+  	var identifier = trans.poolAccountId();
   	return concurrencyCache.isLocked(identifier);
   }
 }

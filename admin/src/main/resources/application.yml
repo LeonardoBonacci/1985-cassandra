@@ -1,0 +1,33 @@
+server.port: 8083
+
+spring.application.name: admin-app
+
+spring:
+  datasource:
+    driverClassName: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/_1985
+    username: mysqluser
+    password: mysqlpw
+
+  jpa:
+    hibernate.ddl-auto: none
+    show-sql: true
+    spring.jpa.properties.hibernate.format_sql: true
+    open-in-view: false
+    properties.hibernate.enable_lazy_load_no_trans: true
+    database-platform: org.hibernate.dialect.MySQL8Dialect  
+
+  jackson.mapper.accept-case-insensitive-enums: true
+
+  cassandra:
+    schema-action: CREATE_IF_NOT_EXISTS
+    request.timeout: 10s
+    connection.connect-timeout: 10s
+    connection.init-query-timeout: 10s
+
+    local-datacenter: datacenter1
+    keyspace-name: spring_cassandra
+
+logging.level.org.springframework.transaction: trace
+logging.level.org.springframework.kafka.transaction: debug
+logging.level.org.springframework.jdbc: debug  

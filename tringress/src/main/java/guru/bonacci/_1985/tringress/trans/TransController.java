@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import guru.bonacci._1985.kafka.KTrans;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
@@ -19,14 +20,14 @@ public class TransController {
 	
 	
 	@PostMapping
-  public Trans transfer(@RequestBody @Valid TransDto dto) {
+  public KTrans transfer(@RequestBody @Valid TransDto dto) {
     var trans = toTrans(dto);
     var result = service.transfer(trans);
     return result;
   }
   
-  static Trans toTrans(TransDto dto) {
-    return Trans.builder()
+  static KTrans toTrans(TransDto dto) {
+    return KTrans.builder()
     				.poolId(dto.getPoolId())
             .transferId(UUID.randomUUID().toString())
             .from(dto.getFrom())

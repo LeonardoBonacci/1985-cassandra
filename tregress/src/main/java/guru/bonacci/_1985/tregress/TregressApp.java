@@ -7,8 +7,7 @@ import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.Payload;
 
-import guru.bonacci._1985.tregress.in.KafTrans;
-import guru.bonacci._1985.tregress.out.CassTransRepo;
+import guru.bonacci._1985.kafka.KTrans;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -28,7 +27,7 @@ public class TregressApp {
 	
 	@KafkaListener(topics = "foo", groupId = "i-am-unique")
 	public void listenGroupFoo(
-				@Payload KafTrans kTrans, 
+				@Payload KTrans kTrans, 
 				@Header(KafkaHeaders.RECEIVED_TIMESTAMP) String timestamp) {
     log.info("Received Message: {} at {}", kTrans, timestamp);
     

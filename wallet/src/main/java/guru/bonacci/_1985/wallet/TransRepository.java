@@ -1,22 +1,15 @@
 package guru.bonacci._1985.wallet;
 
-import java.util.Optional;
-
+import org.springframework.data.cassandra.repository.CassandraRepository;
 import org.springframework.data.cassandra.repository.Query;
-import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
-public interface TransRepository extends CrudRepository<Trans, TransKey> {	
+import guru.bonacci._1985.cassandra.CTrans;
+import guru.bonacci._1985.cassandra.CTransKey;
 
-	Iterable<Trans> findAllByKeyPoolAccountId(String poolAccountId);
-	
-	Optional<Trans> findByKeyPoolAccountIdAndKeyWhen(String poolAccountId, long when);
-	
-	Iterable<Trans> findAllByKeyPoolAccountIdAndKeyWhenGreaterThanEqual(String poolAccountId, long fromWhen);
-	
-	Iterable<Trans> findAllByKeyPoolAccountIdAndKeyWhenGreaterThanEqualAndKeyWhenLessThan(String poolAccountId, long fromWhen, long toWhen);
+public interface TransRepository extends CassandraRepository<CTrans, CTransKey> {	
 
 	// https://www.youtube.com/watch?v=7u3I3OUES_Y
-	@Query("select sum(amount) from spring_cassandra.moneyasint where pool_account_id = :poolAccountId")
+	@Query("select sum(amount) from spring_cassandra.trans where pool_account_id = :poolAccountId")
 	Integer zoekDeBalans(@Param("poolAccountId") String poolAccountId);
 }
