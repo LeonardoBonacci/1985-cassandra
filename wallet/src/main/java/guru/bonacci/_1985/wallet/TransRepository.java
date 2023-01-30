@@ -17,6 +17,6 @@ public interface TransRepository extends CrudRepository<Trans, TransKey> {
 	Iterable<Trans> findAllByKeyPoolAccountIdAndKeyWhenGreaterThanEqualAndKeyWhenLessThan(String poolAccountId, long fromWhen, long toWhen);
 
 	// https://www.youtube.com/watch?v=7u3I3OUES_Y
-	@Query("select sum(amount) from spring_cassandra.trans where pool_account_id = :poolAccountId")
+	@Query("select sum(amount) from spring_cassandra.moneyasint where pool_account_id = :poolAccountId")
 	Integer zoekDeBalans(@Param("poolAccountId") String poolAccountId);
 }

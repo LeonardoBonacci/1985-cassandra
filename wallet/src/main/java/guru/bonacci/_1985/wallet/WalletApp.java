@@ -1,37 +1,45 @@
 package guru.bonacci._1985.wallet;
 
-import org.springframework.boot.CommandLineRunner;
+import java.math.BigDecimal;
+import java.util.Optional;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Bean;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
+import guru.bonacci._1985.wallet.shared.PoolType;
+import guru.bonacci._1985.wallet.shared.TrValidationRequest;
+import guru.bonacci._1985.wallet.shared.TrValidationResponse;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
+@RestController
 @SpringBootApplication
+@RequiredArgsConstructor
 public class WalletApp {
 
+	private final TransRepository repo;
+	
 	public static void main(String[] args) {
 		SpringApplication.run(WalletApp.class, args);
 	}
 
-	@Bean
-	public CommandLineRunner clr(TransRepository transRepo) {
-		return args -> {
-			transRepo.findAll().forEach(tr -> log.info("Tr: {}", tr));
+	@PostMapping("wallet")
+	public TrValidationResponse validationInfo(@RequestBody @Valid TrValidationRequest trValRequest) {
+		log.info(trValRequest.toString());
+
+		var poolType = Optional.of(PoolType.SARDEX);
+
+		return poolType.map(pType -> {
+			var balanceInt = repo.zoekDeBalans(trValRequest.getPoolId() + "." + trValRequest.getFrom());
+			var response = new TrValidationResponse(pType, true, true, new BigDecimal(balanceInt).divide(new BigDecimal(100)));
+			log.info(response.toString());
+			return response;
 			
-			transRepo.findAllByKeyPoolAccountId("coro.me").forEach(tr -> log.info("all: {}", tr));
-			
-//			transRepo.findByKeyPoolAccountIdAndKeyWhen(trans1.getKey().getPoolAccountId(), trans1.getKey().getWhen())
-//				.ifPresent(tr -> log.info("one: {}", tr));
-//			
-//			transRepo.findAllByKeyPoolAccountIdAndKeyWhenGreaterThanEqual(trans1.getKey().getPoolAccountId(), trans1.getKey().getWhen())
-//				.forEach(tr -> log.info("fromWhen: {}", tr));
-//
-//			transRepo.findAllByKeyPoolAccountIdAndKeyWhenGreaterThanEqualAndKeyWhenLessThan(trans1.getKey().getPoolAccountId(), 0l, System.currentTimeMillis())
-//				.forEach(tr -> log.info("fromtoWhen: {}", tr));
-			
-			System.out.println(transRepo.zoekDeBalans("coro.you"));
-		};
+		}).orElse(new TrValidationResponse(null, false, false, BigDecimal.ZERO));
 	}
 }
