@@ -1,4 +1,4 @@
-package guru.bonacci._1985.tringress.concurrent;
+package guru.bonacci._1985.tringress.concurrency;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
