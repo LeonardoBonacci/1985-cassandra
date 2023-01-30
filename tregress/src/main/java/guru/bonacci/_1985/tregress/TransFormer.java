@@ -5,23 +5,23 @@ import java.math.BigDecimal;
 import org.springframework.stereotype.Component;
 
 import guru.bonacci._1985.tregress.in.KafTrans;
-import guru.bonacci._1985.tregress.out.Trans;
-import guru.bonacci._1985.tregress.out.TransKey;
+import guru.bonacci._1985.tregress.out.CassTrans;
+import guru.bonacci._1985.tregress.out.CassTransKey;
 
 @Component
 public class TransFormer {
 
-	Trans toLatter(KafTrans kafka, long when) {
+	CassTrans toLatter(KafTrans kTrans, long when) {
 		
-		var cTrans = Trans.builder()
-				.transferId(kafka.getTransferId())
-				.poolId(kafka.getPoolId())
-				.from(kafka.getFrom())
-				.to(kafka.getTo())
-				.amount(kafka.getAmount().multiply(new BigDecimal(100)).intValue())
+		var cTrans = CassTrans.builder()
+				.transferId(kTrans.getTransferId())
+				.poolId(kTrans.getPoolId())
+				.from(kTrans.getFrom())
+				.to(kTrans.getTo())
+				.amount(kTrans.getAmount().multiply(new BigDecimal(100)).intValue())
 				.build();
 
-		cTrans.setKey(new TransKey(Trans.poolAccountId(cTrans), when));
+		cTrans.setKey(new CassTransKey(CassTrans.poolAccountId(cTrans), when));
 		return cTrans;
 	}
 }

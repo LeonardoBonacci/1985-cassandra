@@ -1,4 +1,4 @@
-package guru.bonacci._1985.tregress.in;
+package guru.bonacci._1985.tringress.trans;
 
 import java.math.BigDecimal;
 
@@ -7,16 +7,16 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-//TODO extrac to shared library
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class KafTrans {
+public class Trans {
 
-	private String poolId; //required
+	private String poolId;
   private String transferId; //required
   private String from; //required
   private String to; //required
   private BigDecimal amount; //required
+  private long when; // not sent - for response
 }

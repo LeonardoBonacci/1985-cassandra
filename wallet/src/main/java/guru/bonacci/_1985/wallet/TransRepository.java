@@ -1,6 +1,5 @@
 package guru.bonacci._1985.wallet;
 
-import java.math.BigDecimal;
 import java.util.Optional;
 
 import org.springframework.data.cassandra.repository.Query;
@@ -19,5 +18,5 @@ public interface TransRepository extends CrudRepository<Trans, TransKey> {
 
 	// https://www.youtube.com/watch?v=7u3I3OUES_Y
 	@Query("select sum(amount) from spring_cassandra.trans where pool_account_id = :poolAccountId")
-	BigDecimal zoekDeBalans(@Param("poolAccountId") String poolAccountId);
+	Integer zoekDeBalans(@Param("poolAccountId") String poolAccountId);
 }

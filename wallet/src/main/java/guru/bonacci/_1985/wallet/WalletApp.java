@@ -31,7 +31,7 @@ public class WalletApp {
 //			transRepo.findAllByKeyPoolAccountIdAndKeyWhenGreaterThanEqualAndKeyWhenLessThan(trans1.getKey().getPoolAccountId(), 0l, System.currentTimeMillis())
 //				.forEach(tr -> log.info("fromtoWhen: {}", tr));
 			
-			System.out.println(transRepo.zoekDeBalans("coro.me"));
+			System.out.println(transRepo.zoekDeBalans("coro.you"));
 		};
 	}
 }

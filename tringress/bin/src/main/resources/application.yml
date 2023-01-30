@@ -1,0 +1,17 @@
+server:
+  port: 8082
+  error.include-message: always
+
+spring:
+  kafka:
+    producer:
+      transaction-id-prefix: tx-
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      
+  application.name: tringress-app
+  mvc.async.request-timeout: 1000
+
+  redis.host: localhost
+  
+  

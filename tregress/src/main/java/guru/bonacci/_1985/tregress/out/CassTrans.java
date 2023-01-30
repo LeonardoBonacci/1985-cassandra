@@ -11,17 +11,18 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+//TODO extrac to shared library
 @Data
 @Table("moneyasint")
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Trans implements Serializable {
+public class CassTrans implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	@PrimaryKey
-	private TransKey key;
+	private CassTransKey key;
 	
 	private String poolId; //required
   private String transferId; //required
@@ -30,11 +31,11 @@ public class Trans implements Serializable {
   private Integer amount; //required
   
 
-  public Trans negativeClone() {
+  public CassTrans negativeClone() {
     return SerializationUtils.clone(this).negate();
   }
   
-  private Trans negate() {
+  private CassTrans negate() {
   	var oldTo = new String(getTo());
   	var oldFrom = new String(getFrom());
   	this.setFrom(oldTo);
@@ -49,7 +50,7 @@ public class Trans implements Serializable {
     return this.getPoolId() + "." + this.getFrom();
   }
   
-  public static String poolAccountId(Trans cTrans) {
+  public static String poolAccountId(CassTrans cTrans) {
     return cTrans.getPoolId() + "." + cTrans.getFrom();
   }
 }

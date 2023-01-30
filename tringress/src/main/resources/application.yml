@@ -1,0 +1,22 @@
+server:
+  port: 8082
+  error.include-message: always
+
+spring:
+  kafka:
+    producer:
+      transaction-id-prefix: tx-
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      
+  application.name: tringress-app
+ 
+  cassandra:
+    schema-action: CREATE_IF_NOT_EXISTS
+    request.timeout: 10s
+    connection.connect-timeout: 10s
+    connection.init-query-timeout: 10s
+
+    local-datacenter: datacenter1
+    keyspace-name: spring_cassandra
+  
