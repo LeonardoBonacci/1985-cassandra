@@ -1,0 +1,20 @@
+spring:
+  application.name: tegress-app
+
+  kafka:
+    bootstrap-servers: localhost:9092
+
+    consumer:
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.value.default.type: guru.bonacci._1985.tregress.in.KafTrans 
+
+  cassandra:
+    schema-action: CREATE_IF_NOT_EXISTS
+    request.timeout: 10s
+    connection.connect-timeout: 10s
+    connection.init-query-timeout: 10s
+
+    local-datacenter: datacenter1
+    keyspace-name: spring_cassandra
