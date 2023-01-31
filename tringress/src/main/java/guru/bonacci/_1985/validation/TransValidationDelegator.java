@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 import guru.bonacci._1985.cassandra.CAccountKey;
 import guru.bonacci._1985.cassandra.CPool;
 import guru.bonacci._1985.kafka.KTrans;
+import guru.bonacci._1985.pools.PoolType;
 import guru.bonacci._1985.repository.AccountRepository;
 import guru.bonacci._1985.repository.PoolRepository;
 import guru.bonacci._1985.rest.TrValidationRequest;
@@ -28,31 +29,39 @@ public class TransValidationDelegator {
   
   public Mono<Boolean> isValid(KTrans trans) {
   	// general validations
-		var poolType = poolRepo.findById(trans.getPoolId()).map(CPool::getType)
-				.orElseThrow(() -> new InvalidTransferException("pool " + trans.getPoolId() + " is obscure to say the least"));
+		Mono<PoolType> poolType = poolRepo.findById(trans.getPoolId()).map(CPool::getType)
+			.switchIfEmpty(Mono.error(new InvalidTransferException("pool " + trans.getPoolId() + " is obscure to say the least")));	
 
-		if(!accountRepo.existsById(new CAccountKey(trans.getPoolId(), trans.getFrom()))) {
-			throw new InvalidTransferException("no account '" + trans.getFrom() + "' in pool '" + trans.getPoolId() + "'");
-		}
+		Mono<Void> fromExists = accountRepo.findById(new CAccountKey(trans.getPoolId(), trans.getFrom()))
+			.switchIfEmpty(Mono.error(new InvalidTransferException("no account '" + trans.getFrom() + "' in pool '" + trans.getPoolId() + "'")))
+			.then();	
 
-		if (!accountRepo.existsById(new CAccountKey(trans.getPoolId(), trans.getTo()))) {
-			throw new InvalidTransferException("no account '" + trans.getTo() + "' in pool '" + trans.getPoolId() + "'");
-		}
+		Mono<Void> toExists = accountRepo.findById(new CAccountKey(trans.getPoolId(), trans.getTo()))
+			.switchIfEmpty(Mono.error(new InvalidTransferException("no account '" + trans.getTo() + "' in pool '" + trans.getPoolId() + "'")))
+			.then();	
 
-		// request balance
-		var trValidationRequest = new TrValidationRequest(trans.getPoolId(), trans.getFrom());
-    var trValidationResponse = new TrValidationResponse(wallet.getBalance(trValidationRequest));
-    log.info("validation response: {}", trValidationResponse);
+		Mono<TrValidationResponse> trValidationResponse =
+			Mono.zip(poolType, fromExists, toExists)
+			.map(tuple -> tuple.getT1())
+			.flatMap(pt -> {
+				// request balance
+				var trValidationRequest = new TrValidationRequest(trans.getPoolId(), trans.getFrom());
+				return wallet.getBalance(trValidationRequest)
+					.map(TrValidationResponse::new)
+					.doOnSuccess(validationResponse -> log.info("validation response: {}", validationResponse));
+			});
     
 		// pool-specific validations
     var validator = appContext.getBean(poolType.toString().toLowerCase(), PoolTypeBasedValidator.class);
-    var validationResult = validator.validate(trValidationResponse, trans.getAmount());
 
-    log.info(validationResult.toString());
-    if (!validationResult.isValid()) {
-    	throw new InvalidTransferException(validationResult.getErrorMessage());
-    }
-
-    return Mono.just(true);
-  }
+    return trValidationResponse
+    	.map(valResp -> validator.validate(valResp, trans.getAmount()))
+			.doOnSuccess(valResult -> log.info(valResult.toString()))
+			.map(valResult -> {
+		    if (!valResult.isValid()) {
+		    	throw new InvalidTransferException(valResult.getErrorMessage());
+		    }
+		    return true;
+		});
+	}
 }

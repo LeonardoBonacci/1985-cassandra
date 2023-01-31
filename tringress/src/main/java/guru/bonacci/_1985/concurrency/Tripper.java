@@ -22,7 +22,5 @@ public class Tripper {
 			throw new TripException("Still processing your previous transfer");
 		}
 		return cTemplate.insert(trip).then();
-		//ttl to facilitate testing
-//		cTemplate.insert(trip, InsertOptions.builder().ttl(Duration.ofSeconds(15)).build());
 	}
 }

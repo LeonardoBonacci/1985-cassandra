@@ -24,12 +24,8 @@ public class CassConcurrencyCacheImpl implements ConcurrencyCache {
 		long now = System.currentTimeMillis();
 		
 		Mono<Boolean> isLocked = insert(identifier, now)
-			.flatMap(_void -> {
-			
-				var query = String.format(QUERY, identifier, now);
-				log.debug(query);
-				return cTemplate.selectOne(query, Lock.class);
-		}).map(busy -> {
+			.then(cTemplate.selectOne(String.format(QUERY, identifier, now), Lock.class))
+			.map(busy -> {
 				
 				if (busy != null) {
 					log.warn("busy {}", busy);

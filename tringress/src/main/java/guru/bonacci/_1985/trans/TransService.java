@@ -1,7 +1,5 @@
 package guru.bonacci._1985.trans;
 
-import java.util.function.BiConsumer;
-
 import org.springframework.stereotype.Service;
 
 import guru.bonacci._1985.concurrency.ConcurrencyCache;
@@ -12,7 +10,6 @@ import guru.bonacci._1985.validation.TransValidationDelegator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Mono;
-import reactor.core.publisher.SynchronousSink;
 
 @Slf4j
 @Service
@@ -27,32 +24,24 @@ public class TransService {
 
 	
   public Mono<KTrans> transfer(KTrans trans) {
-  	BiConsumer<Boolean, SynchronousSink<Boolean>> handler = (blocked, sink) -> {
-      if (blocked) {
-        sink.error(new TransferConcurrencyException());
-      } else {
-      	sink.next(blocked);
-      }
-  	};
+  	Mono<Boolean> notBlocked = isBlocked(trans).map(is -> {
+       if (is) {
+           throw new TransferConcurrencyException();
+       }
+       return is;
+  	});	
   	
-  	isBlocked(trans).map(blocked -> {
-	  	if (blocked) { 
-	  		throw new TransferConcurrencyException();
-	  	});
-	  ).then();
-	  
-  	Mono<Void> readyForTheLaunchMono = 
+  	Mono<Void> readyForTheLaunch = 
 	  	tripper.register(trans)
 	  		.and(validator.isValid(trans).then());
   	
-    return readyForTheLaunchMono.flatMap(_void -> kProducer.send(trans))
-    		.doOnSuccess(senderResult -> log.info("sent to {}: {}", TransProducer.TOPIC_NAME, senderResult));
+    return notBlocked.then(readyForTheLaunch)
+		    		.then(kProducer.send(trans))
+		    		.doOnSuccess(senderResult -> log.info("sent to {}: {}", TransProducer.TOPIC_NAME, senderResult));
   }
   
   private Mono<Boolean> isBlocked(KTrans trans) {
   	var identifier = trans.poolAccountId();
   	return concurrencyCache.isLocked(identifier);
   }
-  
-  
 }

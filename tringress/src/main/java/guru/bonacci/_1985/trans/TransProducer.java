@@ -28,6 +28,7 @@ public class TransProducer {
 	}
 
   Mono<Long> sendMessage(String topic, String key, KTrans message) {
-    return kTemplate.send(topic, key, message).map(result -> result.recordMetadata().timestamp());
+    return kTemplate.send(topic, key, message)
+						.map(result -> result.recordMetadata().timestamp());
   }
 }
