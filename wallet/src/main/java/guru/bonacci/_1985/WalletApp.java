@@ -12,6 +12,7 @@ import guru.bonacci._1985.rest.TrValidationRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import reactor.core.publisher.Mono;
 
 @Slf4j
 @RestController
@@ -28,12 +29,11 @@ public class WalletApp {
 
 	
 	@PostMapping("wallet")
-	public BigDecimal validationInfo(@RequestBody @Valid TrValidationRequest trValRequest) {
+	public Mono<BigDecimal> validationInfo(@RequestBody @Valid TrValidationRequest trValRequest) {
 		log.info(trValRequest.toString());
 
-		var balanceLong = transRepo.zoekDeBalans(trValRequest.getPoolId(), trValRequest.getFrom());
-		var balance = BigDecimal.valueOf(balanceLong).divide(new BigDecimal(100));
-		log.info(balance.toString());
-		return balance;
+		Mono<Long> longBalance = transRepo.zoekDeBalans(trValRequest.getPoolId(), trValRequest.getFrom());
+		return longBalance.map(balance -> BigDecimal.valueOf(balance).divide(new BigDecimal(100)))
+											.doOnNext(balance -> log.info("{}.{} owns {}", trValRequest.getPoolId(), trValRequest.getFrom(), balance.toString()));
 	}
 }
