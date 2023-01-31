@@ -31,8 +31,6 @@ public class CTrans implements Serializable {
   
 
   public CTrans negativeClone() {
-    // this is a bit awkward..
-  	amount = amount * -1;
     return SerializationUtils.clone(this).negate();
   }
   
@@ -41,11 +39,10 @@ public class CTrans implements Serializable {
   	var oldFrom = new String(getFrom());
   	this.setFrom(oldTo);
   	this.setTo(oldFrom);
-  	// .. in combination with this.
     this.setAmount(this.getAmount() * -1);
     // and, at last, with new values..
     this.getKey().setPoolId(getPoolId());
-    this.getKey().setAccountName(getFrom());
+    this.getKey().setAccountName(getTo());
     return this;
   }
   
