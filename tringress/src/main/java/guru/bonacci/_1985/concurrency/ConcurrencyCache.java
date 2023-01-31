@@ -1,6 +1,8 @@
 package guru.bonacci._1985.concurrency;
 
+import reactor.core.publisher.Mono;
+
 public interface ConcurrencyCache {
 
-	 boolean isLocked(String identifier);
+	 Mono<Boolean> isLocked(String identifier);
 }	 

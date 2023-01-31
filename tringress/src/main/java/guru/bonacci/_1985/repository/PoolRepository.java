@@ -1,9 +1,9 @@
 package guru.bonacci._1985.repository;
 
-import org.springframework.data.cassandra.repository.CassandraRepository;
+import org.springframework.data.cassandra.repository.ReactiveCassandraRepository;
 
 import guru.bonacci._1985.cassandra.CPool;
 
-public interface PoolRepository extends CassandraRepository<CPool, String> {	
+public interface PoolRepository extends ReactiveCassandraRepository<CPool, String> {	
 
 }

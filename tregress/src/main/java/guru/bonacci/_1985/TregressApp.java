@@ -15,7 +15,7 @@ import reactor.core.publisher.Flux;
 @RequiredArgsConstructor
 public class TregressApp implements CommandLineRunner {
 
-	private final ReactiveKafkaConsumerTemplate<String, KTrans> reactKafkaConsumerTemplate;
+	private final ReactiveKafkaConsumerTemplate<String, KTrans> kTemplate;
 	private final TransFormer transFormer;
 	private final CassTransRepo transRepo;
 
@@ -24,9 +24,9 @@ public class TregressApp implements CommandLineRunner {
 		SpringApplication.run(TregressApp.class, args);
 	}
 
-	
-	private Flux<Void> consumeTopic() {
-   return reactKafkaConsumerTemplate
+	// https://en.wiktionary.org/wiki/consume#Etymology
+	private Flux<Void> consume() {
+   return kTemplate
            .receiveAutoAck()
            .doOnNext(consumerRecord -> log.info("received value={}", consumerRecord.value()))
            .map(kTrans -> transFormer.toLatter(kTrans.value(), kTrans.timestamp()))
@@ -37,6 +37,6 @@ public class TregressApp implements CommandLineRunner {
   @Override
   public void run(String... args) {
       // trigger consumption
-      consumeTopic().subscribe();
+      consume().subscribe();
   }
 }

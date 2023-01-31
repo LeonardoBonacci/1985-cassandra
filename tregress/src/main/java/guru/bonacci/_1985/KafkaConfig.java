@@ -11,7 +11,7 @@ import guru.bonacci._1985.kafka.KTrans;
 import reactor.kafka.receiver.ReceiverOptions;
 
 @Configuration
-public class ReactiveKafkaConsumerConfig {
+public class KafkaConfig {
     
 	@Bean
   public ReceiverOptions<String, KTrans> kafkaReceiverOptions(KafkaProperties kafkaProperties) {

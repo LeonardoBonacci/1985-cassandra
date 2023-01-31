@@ -13,6 +13,7 @@ import guru.bonacci._1985.rest.TrValidationResponse;
 import guru.bonacci._1985.wallet.WalletClient;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import reactor.core.publisher.Mono;
 
 @Slf4j
 @Component
@@ -25,7 +26,7 @@ public class TransValidationDelegator {
   private final AccountRepository accountRepo;
 
   
-  public boolean isValid(KTrans trans) {
+  public Mono<Boolean> isValid(KTrans trans) {
   	// general validations
 		var poolType = poolRepo.findById(trans.getPoolId()).map(CPool::getType)
 				.orElseThrow(() -> new InvalidTransferException("pool " + trans.getPoolId() + " is obscure to say the least"));
@@ -52,6 +53,6 @@ public class TransValidationDelegator {
     	throw new InvalidTransferException(validationResult.getErrorMessage());
     }
 
-    return true;
+    return Mono.just(true);
   }
 }
