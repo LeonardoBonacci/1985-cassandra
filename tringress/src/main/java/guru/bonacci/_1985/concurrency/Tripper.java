@@ -17,10 +17,13 @@ public class Tripper {
 	
 	public Mono<Void> register(final KTrans trans) {
 		var trip = new CTrip(trans.poolAccountId());
-		var tripped = cTemplate.selectOneById(trip.getPoolAccountId(), CTrip.class);
-		if (tripped != null) {
-			throw new TripException("Still processing your previous transfer");
-		}
-		return cTemplate.insert(trip).then();
+//		Mono<CTrip> tripped = cTemplate.selectOneById(trip.getPoolAccountId(), CTrip.class)
+//				.switchIfEmpty(Mono.error(new TripException("Still processing your previous transfer")));	
+
+//		Mono<CTrip> tripped = cTemplate.selectOneById(trip.getPoolAccountId(), CTrip.class)
+//				.switchIfEmpty(Mono.error(new TripException("Still processing your previous transfer")));	
+
+		Mono<String> tripped = Mono.just("abc");
+		return tripped.then(cTemplate.insert(trip).then());
 	}
 }

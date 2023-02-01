@@ -13,6 +13,7 @@ import guru.bonacci._1985.kafka.KTrans;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import reactor.core.publisher.Hooks;
 import reactor.core.publisher.Mono;
 
 @Slf4j
@@ -26,6 +27,8 @@ public class TransController {
 	// TODO Callable<> 
 	@PostMapping
   public Mono<KTrans> transfer(@RequestBody @Valid TransDto dto) {
+		Hooks.onOperatorDebug();
+		
     var watch = new StopWatch();
     watch.start();
 

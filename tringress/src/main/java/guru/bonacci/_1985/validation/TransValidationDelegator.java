@@ -40,23 +40,19 @@ public class TransValidationDelegator {
 			.switchIfEmpty(Mono.error(new InvalidTransferException("no account '" + trans.getTo() + "' in pool '" + trans.getPoolId() + "'")))
 			.then();	
 
-		Mono<TrValidationResponse> trValidationResponse =
-			Mono.zip(poolType, fromExists, toExists)
-			.map(tuple -> tuple.getT1())
-			.flatMap(pt -> {
-				// request balance
-				var trValidationRequest = new TrValidationRequest(trans.getPoolId(), trans.getFrom());
-				return wallet.getBalance(trValidationRequest)
-					.map(TrValidationResponse::new)
-					.doOnSuccess(validationResponse -> log.info("validation response: {}", validationResponse));
-			});
-    
-		// pool-specific validations
-    var validator = appContext.getBean(poolType.toString().toLowerCase(), PoolTypeBasedValidator.class);
+		Mono<TrValidationResponse> trValidationResponse = 
+					wallet.getBalance(new TrValidationRequest(trans.getPoolId(), trans.getFrom()))
+							.map(TrValidationResponse::new)
+							.doOnSuccess(validationResponse -> log.info("validation response: {}", validationResponse));
 
-    return trValidationResponse
-    	.map(valResp -> validator.validate(valResp, trans.getAmount()))
-			.doOnSuccess(valResult -> log.info(valResult.toString()))
+		// specific validations
+		return Mono.zip(poolType, fromExists, toExists, trValidationResponse)
+			.map(tuple4 -> {
+				var validator = appContext.getBean(tuple4.getT1().toString().toLowerCase(), PoolTypeBasedValidator.class);
+				var valResult = validator.validate(tuple4.getT4(), trans.getAmount());
+				log.info("validation result {}", valResult.toString());
+				return valResult;
+			})
 			.map(valResult -> {
 		    if (!valResult.isValid()) {
 		    	throw new InvalidTransferException(valResult.getErrorMessage());
