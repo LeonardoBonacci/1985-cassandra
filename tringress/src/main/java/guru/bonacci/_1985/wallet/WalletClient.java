@@ -15,8 +15,7 @@ public class WalletClient {
 
 	@RequestMapping(method = RequestMethod.POST, value = "/wallet")
 	public Mono<BigDecimal> getBalance(TrValidationRequest request) {
-//		WebClient client = WebClient.create("http://localhost:8084/wallet");
-//		return client.post().bodyValue(request).retrieve().bodyToMono(BigDecimal.class);
-		return Mono.just(BigDecimal.TEN);
+		WebClient client = WebClient.create("http://localhost:8084/wallet");
+		return client.post().bodyValue(request).retrieve().bodyToMono(BigDecimal.class);
 	}
 }

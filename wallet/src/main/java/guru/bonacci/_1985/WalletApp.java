@@ -34,6 +34,6 @@ public class WalletApp {
 
 		Mono<Long> longBalance = transRepo.zoekDeBalans(trValRequest.getPoolId(), trValRequest.getFrom());
 		return longBalance.map(balance -> BigDecimal.valueOf(balance).divide(new BigDecimal(100)))
-											.doOnNext(balance -> log.info("{}.{} owns {}", trValRequest.getPoolId(), trValRequest.getFrom(), balance.toString()));
+											.doOnSuccess(balance -> log.info("{}.{} owns {}", trValRequest.getPoolId(), trValRequest.getFrom(), balance.toString()));
 	}
 }

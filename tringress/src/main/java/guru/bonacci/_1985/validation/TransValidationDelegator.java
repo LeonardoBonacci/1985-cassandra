@@ -43,7 +43,7 @@ public class TransValidationDelegator {
 		Mono<TrValidationResponse> trValidationResponse = 
 					wallet.getBalance(new TrValidationRequest(trans.getPoolId(), trans.getFrom()))
 							.map(TrValidationResponse::new)
-							.doOnSuccess(validationResponse -> log.info("validation response: {}", validationResponse));
+							.doOnSubscribe(validationResponse -> log.info("validation response: {}", validationResponse));
 
 		// specific validations
 		return Mono.zip(poolType, fromExists, toExists, trValidationResponse)
